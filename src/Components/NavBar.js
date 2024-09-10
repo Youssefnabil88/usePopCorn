@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function SearchBar() {
+export function SearchBar() {
   const [query, setQuery] = useState("");
   return (
     <input
@@ -13,8 +13,7 @@ function SearchBar() {
   );
 }
 
-
-function Result({ movies }) {
+export function Result({ movies }) {
   return (
     <p className="num-results">
       Found <strong>{movies.length}</strong> results
@@ -22,7 +21,7 @@ function Result({ movies }) {
   );
 }
 
-function Logo() {
+export function Logo() {
   return (
     <div className="logo">
       <span role="img">🍿</span>
@@ -31,14 +30,10 @@ function Logo() {
   );
 }
 
-export default function NavBar({movies}) {
+export default function NavBar({ children }) {
   return (
     <>
-      <nav className="nav-bar">
-        <Logo />
-        <SearchBar />
-        <Result movies={movies} />
-      </nav>
+      <nav className="nav-bar">{children}</nav>
     </>
   );
 }

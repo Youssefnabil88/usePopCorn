@@ -1,14 +1,7 @@
-import { useState } from "react";
-import BoxList from "./BoxList";
+import { Children, useState } from "react";
+import BoxList from "./Box";
 import WatchedList from "./WhatcedList";
 
-export default function Main({ movies, tempWatchedData }) {
-  const [watched, setWatched] = useState(tempWatchedData);
-
-  return (
-    <main className="main">
-      <BoxList movies={movies} />
-      <WatchedList tempWatchedData={tempWatchedData} watched={watched} />
-    </main>
-  );
+export default function Main({ children }) {
+  return <main className="main">{children}</main>;
 }

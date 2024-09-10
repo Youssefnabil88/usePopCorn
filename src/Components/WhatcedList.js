@@ -4,32 +4,18 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 export default function WatchedList({ watched }) {
-  const [isOpen2, setIsOpen2] = useState(true);
-
   return (
     <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
-      </button>
-      {isOpen2 && (
-        <>
-          <Summary watched={watched} />
-
-          <ul className="list">
-            {watched.map((movie) => (
-              <WathcedMovie movie={movie} key={movie.imdbID} />
-            ))}
-          </ul>
-        </>
-      )}
+      <ul className="list">
+        {watched.map((movie) => (
+          <WathcedMovie movie={movie} key={movie.imdbID} />
+        ))}
+      </ul>
     </div>
   );
 }
 
-function Summary({ watched }) {
+export function Summary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
   const avgRuntime = average(watched.map((movie) => movie.runtime));
@@ -59,7 +45,7 @@ function Summary({ watched }) {
   );
 }
 
-function WathcedMovie({ movie }) {
+export function WathcedMovie({ movie }) {
   return (
     <li key={movie.imdbID}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
