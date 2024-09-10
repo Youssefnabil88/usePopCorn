@@ -25,22 +25,32 @@ const starStyle = {
 
 export default function StarRating({ numberOfStars = 5 }) {
   const [rating, setRating] = useState(0);
+  const [tempRating, setTempRating] = useState(0);
+
+
   return (
     <div style={containerStyle}>
       <div style={starContainerStyle}>
         {/* Instead to write one element per star */}
         {Array.from({ length: numberOfStars }, (_, i) => (
-          <Star key={i} setRating={() => setRating(i + 1) } full={rating >= i+1} />
+          <Star
+            key={i}
+            setRating={() => setRating(i + 1)}
+            full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
+            handleTempRatingEnter={() => setTempRating(i+1)}
+            tempRating={tempRating}
+            handleTempRatingLeave={()=> setTempRating(0)}
+          />
         ))}
       </div>
-      <p style={textStyle}>{rating || null}</p>
+      <p style={textStyle}>{  tempRating || rating  || ""}</p>
     </div>
   );
 }
 
-function Star({ setRating, full }) {
+function Star({ setRating, full, handleTempRatingEnter,tempRating,handleTempRatingLeave }) {
   return (
-    <span role="button" style={starStyle} onClick={setRating}>
+    <span role="button" style={starStyle} onClick={setRating} onMouseEnter={handleTempRatingEnter} onMouseLeave={handleTempRatingLeave}>
       {full ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -69,22 +79,3 @@ function Star({ setRating, full }) {
   );
 }
 
-/*
-SPACING SYSTEM (px)
-2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128
-
-FONT SIZE SYSTEM (px)
-10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 /52 / 62 / 74 / 86 / 98
-*/
-
-/*
-FULL STAR
-
-
-
-
-EMPTY STAR
-
-
-
-*/
