@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import PropTypes from 'prop-types';
 const containerStyle = {
   display: "flex",
   alignItems: "center",
@@ -15,6 +15,13 @@ const textStyle = {
   lineHeight: "0",
   margin: "0",
 };
+
+StarRating.propTypes ={
+  numberOfStars: PropTypes.number,
+  size:PropTypes.number,
+  color:PropTypes.string,
+  arr:PropTypes.array
+}
 
 export default function StarRating({
   numberOfStars = 5,
@@ -43,7 +50,7 @@ export default function StarRating({
           />
         ))}
       </div>
-      <p style={textStyle}>{tempRating?  arr[tempRating -1 ]: arr.length === numberOfStars ? arr[rating-1]:tempRating || rating || ""}</p>
+      <p style={textStyle}> {arr.length ===numberOfStars ? arr[tempRating?  tempRating -1: rating -1 ] : tempRating? tempRating:rating} </p>
     </div>
   );
 }
@@ -55,7 +62,6 @@ function Star({
   handleTempRatingLeave,
   color,
   size,
-  word,
 }) {
   const starStyle = {
     display: "block",

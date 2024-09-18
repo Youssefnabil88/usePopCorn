@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar, { Logo, Result, SearchBar } from "./Components/NavBar";
 import Main from "./Components/Main";
 
 import WatchedList, { Summary, WathcedMovie } from "./Components/WhatcedList";
 import Box from "./Components/Box";
 import MovieList from "./Components/MovieList";
+import Loader from "./Components/Loader";
+import Error from "./Components/Error";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -52,20 +54,67 @@ const tempWatchedData = [
   },
 ];
 
+const KEY = "dc768bc";
+
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [query, setQuery] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const tempQuery = "joker";      
+
+  
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        setIsLoading(true);
+        setError("");
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+        );
+        if (!res.ok) {
+          throw new Error("something went wrong with fetching movies");
+        }
+
+        const data = await res.json();
+
+        if (data.Response === "False") {
+          throw new Error("Movie not found");
+        }
+        setMovies(data.Search || []);
+      } catch (err) {
+
+        console.log(err.message);
+        setError(err.message);
+        setMovies([]);
+ 
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchMovies();
+
+  }, [query]);
 
   return (
     <>
       <NavBar>
         <Logo />
-        <SearchBar />
+        <SearchBar query={query} setQuery={setQuery} />
         <Result movies={movies} />
       </NavBar>
       <Main>
         <Box>
-          <MovieList movies={movies} />{" "}
+          {error ? (
+            <Error>{error}</Error>
+          ) : isLoading ? (
+            <Loader />
+          ) : (
+            <MovieList movies={movies} />
+          )}
+
         </Box>
 
         <Box>
