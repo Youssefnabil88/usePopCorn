@@ -1,20 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { useKey } from "../hooks/useKey";
+import { useEffect, useState } from "react";
 import Loader from "./Loader";
 import StarRating from "./StarRating";
 
 const KEY = "f84fc31d";
 
-export default  function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
+export default  function MovieDetails({ selectedId, onAddWatched, watched,handleCloseMovieDetails }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [userRating, setUserRating] = useState("");
+ 
 
 
-  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-  const watchedUserRating = watched.find(
-    (movie) => movie.imdbID === selectedId
-  )?.userRating;
+
 
   const {
     Title: title,
@@ -34,22 +30,21 @@ export default  function MovieDetails({ selectedId, onCloseMovie, onAddWatched, 
 
 
 
-  function handleAdd() {
-    const newWatchedMovie = {
-      imdbID: selectedId,
-      title,
-      year,
-      poster,
-      imdbRating: Number(imdbRating),
-      runtime: Number(runtime.split(" ").at(0)),
-      userRating
-    };
+  // function handleAdd() {
+  //   const newWatchedMovie = {
+  //     imdbID: selectedId,
+  //     title,
+  //     year,
+  //     poster,
+  //     imdbRating: Number(imdbRating),
+  //     runtime: Number(runtime.split(" ").at(0)),
+  //     userRating
+  //   };
 
-    onAddWatched(newWatchedMovie);
-    onCloseMovie();
-
+  //   onAddWatched(newWatchedMovie);
+  //   onCloseMovie();
   
-  }
+  // }
 
 
   useEffect(
@@ -82,13 +77,13 @@ export default  function MovieDetails({ selectedId, onCloseMovie, onAddWatched, 
   );
 
   return (
-    <div className="details">
+    <div className="details box ">
       {isLoading ? (
         <Loader />
       ) : (
         <>
           <header>
-            <button className="btn-back" onClick={onCloseMovie}>
+            <button className="btn-back" onClick={handleCloseMovieDetails}>
               &larr;
             </button>
             <img src={poster} alt={`Poster of ${movie} movie`} />
@@ -108,24 +103,23 @@ export default  function MovieDetails({ selectedId, onCloseMovie, onAddWatched, 
 
           <section>
             <div className="rating">
-              {!isWatched ? (
-                <>
+              
+               
                   <StarRating
                     numberOfStars={10}
                     size={24}
-                    onSetRating={setUserRating}
+                  
                   />
                  
-                    <button className="btn-add" onClick={handleAdd}>
+                    <button className="btn-add" >
                       + Add to list
                     </button>
-                 
-                </>
-              ) : (
+            
+              
                 <p>
-                  You rated with movie {watchedUserRating} <span>⭐️</span>
+                  You rated with movie  <span>⭐️</span>
                 </p>
-              )}
+            
             </div>
             <p>
               <em>{plot}</em>

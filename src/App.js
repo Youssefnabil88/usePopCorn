@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import NavBar, { Logo, Result, SearchBar } from "./Components/NavBar";
 import Main from "./Components/Main";
 
-import WatchedList, { Summary, WathcedMovie } from "./Components/WhatcedList";
+import Summary from './Components/Summary'
 import Box from "./Components/Box";
 import MovieList from "./Components/MovieList";
 import Loader from "./Components/Loader";
 import Error from "./Components/Error";
+import MovieDetails from "./Components/MovieDetails";
+import WatchedMoviesList from "./Components/WhatcedList";
+
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -62,10 +65,18 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedId, setSelectedID] = useState(null);
 
-  const tempQuery = "joker";      
+  const tempQuery = "joker";
 
-  
+  function handleSelectMovie(movieID) {
+    movieID === selectedId ? setSelectedID(null):  setSelectedID(movieID);
+  }
+
+  function handleCloseMovieDetails(){
+    setSelectedID(null);
+  }
+
   useEffect(() => {
     async function fetchMovies() {
       try {
@@ -85,17 +96,14 @@ export default function App() {
         }
         setMovies(data.Search || []);
       } catch (err) {
-
         console.log(err.message);
         setError(err.message);
         setMovies([]);
- 
       } finally {
         setIsLoading(false);
       }
     }
     fetchMovies();
-
   }, [query]);
 
   return (
@@ -112,13 +120,18 @@ export default function App() {
           ) : isLoading ? (
             <Loader />
           ) : (
-            <MovieList movies={movies} />
+            <MovieList handleSelectMovie={handleSelectMovie} movies={movies} />
           )}
-
         </Box>
 
         <Box>
-          <Summary watched={watched} /> <WatchedList watched={watched} />
+          {selectedId ? (
+            <MovieDetails selectedId={selectedId} handleCloseMovieDetails={handleCloseMovieDetails}/>
+          ) : (
+            <>
+              <Summary watched={watched} /> <WatchedMoviesList watched={watched} />
+            </>
+          )}  
         </Box>
       </Main>
     </>

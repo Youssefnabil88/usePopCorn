@@ -1,6 +1,7 @@
-export default function Movie({ movie }) {
+export default function Movie({ movie, handleSelectMovie }) {
+
   return (
-    <li key={movie.imdbID}>
+    <li key={movie.imdbID} onClick={()=>handleSelectMovie(movie.imdbID)} style={{cursor:"pointer"}}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
