@@ -4,9 +4,11 @@ import StarRating from "./StarRating";
 
 const KEY = "f84fc31d";
 
-export default  function MovieDetails({ selectedId, onAddWatched, watched,handleCloseMovieDetails }) {
+export default  function MovieDetails({ selectedId,handleCloseMovieDetails, handleAddMovie }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState('');
+
  
 
 
@@ -26,25 +28,24 @@ export default  function MovieDetails({ selectedId, onAddWatched, watched,handle
   } = movie;
 
 
+  function handleAdd(){
+     const newMovie={
+    Title:title,
+    Year:year,
+    Poster:poster,
+    //To split the number from the string
+    Runtime: Number(runtime.replace(/\D/g, '')),
+    imdbRating,
+    userRating
+  }
+
+  handleAddMovie(newMovie)
 
 
 
+  }
+ 
 
-  // function handleAdd() {
-  //   const newWatchedMovie = {
-  //     imdbID: selectedId,
-  //     title,
-  //     year,
-  //     poster,
-  //     imdbRating: Number(imdbRating),
-  //     runtime: Number(runtime.split(" ").at(0)),
-  //     userRating
-  //   };
-
-  //   onAddWatched(newWatchedMovie);
-  //   onCloseMovie();
-  
-  // }
 
 
   useEffect(
@@ -63,18 +64,7 @@ export default  function MovieDetails({ selectedId, onAddWatched, watched,handle
     [selectedId]
   );
 
-  useEffect(
-    function () {
-      if (!title) return;
-      document.title = `Movie | ${title}`;
 
-      return function () {
-        document.title = "usePopcorn";
-        // console.log(`Clean up effect for movie ${title}`);
-      };
-    },
-    [title]
-  );
 
   return (
     <div className="details box ">
@@ -106,12 +96,14 @@ export default  function MovieDetails({ selectedId, onAddWatched, watched,handle
               
                
                   <StarRating
-                    numberOfStars={10}
+                    maxRating={10}
                     size={24}
+                    onSetRating={setUserRating}
+                   
                   
                   />
                  
-                    <button className="btn-add" >
+                    <button className="btn-add" onClick={handleAdd}>
                       + Add to list
                     </button>
             

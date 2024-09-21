@@ -8,7 +8,7 @@ import MovieList from "./Components/MovieList";
 import Loader from "./Components/Loader";
 import Error from "./Components/Error";
 import MovieDetails from "./Components/MovieDetails";
-import WatchedMoviesList from "./Components/WhatcedList";
+import WatchedMoviesList from "./Components/WatchedMoviesList";
 
 const tempMovieData = [
   {
@@ -55,6 +55,7 @@ const tempWatchedData = [
     imdbRating: 8.5,
     userRating: 9,
   },
+
 ];
 
 const KEY = "dc768bc";
@@ -74,6 +75,11 @@ export default function App() {
   }
 
   function handleCloseMovieDetails(){
+    setSelectedID(null);
+  }
+
+  function handleAddMovie(newMovie){
+    setWatched([...watched, newMovie])
     setSelectedID(null);
   }
 
@@ -126,7 +132,7 @@ export default function App() {
 
         <Box>
           {selectedId ? (
-            <MovieDetails selectedId={selectedId} handleCloseMovieDetails={handleCloseMovieDetails}/>
+            <MovieDetails selectedId={selectedId} handleCloseMovieDetails={handleCloseMovieDetails} handleAddMovie={handleAddMovie}/>
           ) : (
             <>
               <Summary watched={watched} /> <WatchedMoviesList watched={watched} />
